@@ -23,36 +23,54 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [//]: # (Image References)
 
 [image2a]: ./assets/table_data_summary.png "Data Table"
-[image2b]: ./assets/gallery_class_samples.png "Gallery"
-[image2c]: ./assets/bars_class_distribution.png "Class Distribution"
-[image3a]: ./assets/imgs_grayscale.png "Grayscale"
+[image2b]: ./assets/bars_class_distribution.png "Class Distribution"
+[image2c]: ./assets/gallery_class_samples.png "Gallery"
+[image2d]: ./assets/gallery_train.png "Gallery of Train Examples"
+[image2e]: ./assets/gallery_valid.png "Gallery of Valid Examples"
+[image3a]: ./assets/image_preprocess.png "Preprocess"
+[image5a]: ./assets/diagram_leNet.png "Diagram LeNet"
+[image5b]: ./assets/diagram_multiScale.png "Diagram Multi-Scale"
 
 
 ## **Writeup report**
 
 ### Dataset Summary & Exploration
 
-#### 1. Dataset summary
-In the code, I used python's numpy methods to calculate summary statistics of the traffic signs dataset. Please refer to code cell [2] in the IPython notebook.
+#### 1. Dataset summary 
+In `[2] code cell`,
+I used python's numpy library to calculate summary statistics of the traffic signs data set.
 
-* The size of training set is 34799
-* The size of test set is 12630
+* The size of training set is 34,799
+* The size of test set is 12,630
 * The shape of a traffic sign image is 32x32x3
 * The number of unique classes/labels in the data set is 43
 
 #### 2. Exploratory Visualization
-In [3] and [4] code cells of the IPython notebook, it displays: 
-a) a data table of the summary of training and validation data mapping with class labels,  
-b) a gallary of a random sample of 43 classes in training data, and 
-c) a bar chart that shows the counting distrubution of these classes.
+In `[3], [4], and [5] code cells`,
+there are five visualizations of data set.
 
-![alt text][image2a]
+* Data table of the summary of training and validation data mapping with class labels
+* Bar chart that shows the counting distrubution of these classes  
+
+![data table][image2a]
 ...
-![alt text][image2b]
-![alt text][image2c]
+![bar chart][image2b]
 
-As we can see in the bar chart, some classes (in red color) have less than 500 samples. This may lead to issues such as overfit or increase false classification. So, let's come back to check these later.  
+In the table and bar chart, I would like to check the size of both training and validation sets and how they are splitted. These two visualizations show that, for example, the split ratio is in a range between 10-20%, the smallest sets (label 0, 19, 37) of training/validation data have less than 200/30 samples, and less than half of classes have more than 1000 training samples. Is it relatively small for a CNN model? Perhaps, I need more samples via data augmentation??
 
+Now let's have a look at the images.
+
+* Gallary of a random sample of 43 classes in training data
+![gallary 43 classes][image2c]
+
+I picked label 19 to take a deeper look at samples in one class. 
+
+* Gallary of the training set
+![gallary train][image2d]
+* Gallary of the validation set
+![gallary valid][image2e]
+
+From galleries above, I observed that these images were likely taken from 30fps video clips. In every 30 clips, the same traffic sign zooms in and out, the hue/saturation/brightness (HSB) differs, and some of images are neither straight nor originally square. The validation set, in particular, there is only 1 video clips in class label 19, which is potential to issues such as overfitting or false classification.
 
 ### Design and Test a Model Architecture
 
