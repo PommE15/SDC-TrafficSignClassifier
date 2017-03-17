@@ -77,9 +77,9 @@ From galleries above, I observed that these images were likely taken from 30fps 
 ### Design and Test a Model Architecture
 
 #### 3. Data Preprocessing
-In `[1] code cell`, all images were loaded by pickle library which contains resize version of 32x32 while original ones vary from 15x15 to 250x250.
+In `code cell [1]`, all images were loaded by pickle library which contains resize version of 32x32 while original ones vary from 15x15 to 250x250.
 
-In `[6] code cell`, I applied grayscaling and normalization of min-max scaling as preprocessing steps. Here is a list of data preprocessing steps that I consider to apply: 
+In `code cell [6]`, I applied grayscaling and normalization of min-max scaling as preprocessing steps. Here is a list of data preprocessing steps that I consider to apply: 
 * grayscaling (or huescaling)
 * normalization 
 * data augmentation (or cross-validation)
@@ -100,11 +100,8 @@ As for the data augmentation step, I haven't decided whether using it or not. I'
 Last but not lease, condsidering both computer power and the intrinsic factor that some classes of samples are lack of variations in images, I decided not to use either cross-validation or mixing (training and validation sets) and respliting them for this project.
 
 
-#### 4. Weight Initialization
-
-I used the tf.truncated_normal() function to initialize the weights and set all bias to 0. Using the default mean and standard deviation from tf.truncated_normal() is fine. However, tuning these hyperparameters can result in better performance ...
-
-In practice, the current recommendation is to use ReLU units and use the w = np.random.randn(n) * sqrt(2.0/n)
+#### 4. Initialization
+In `[7] code cell`, to initialize weights and bias, I used the tf.truncated_normal() function. I set all bias to 0 and initialized weights with mean=0 and stddev=0.1. Note that, in practice, the current recommendation is to give the initialization w = np.random.randn(n) * sqrt(2.0/n), this is used in the specific case of neural networks with ReLU neurons. [[See reference]](http://cs231n.github.io/neural-networks-2/#init)
 
 #### 5. Model Architecture 
 Here are two diagrams and tables describing my experiments models. 
