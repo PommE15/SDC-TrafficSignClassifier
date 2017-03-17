@@ -27,7 +27,9 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image2c]: ./assets/gallery_class_samples.png "Gallery"
 [image2d]: ./assets/gallery_train.png "Gallery of Train Examples"
 [image2e]: ./assets/gallery_valid.png "Gallery of Valid Examples"
-[image3a]: ./assets/image_preprocess.png "Preprocess"
+[image3a]: ./assets/image_preprocess.png "Hue good"
+[image3c]: ./assets/image_hue_tragedy1.png "Hue bad"
+[image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.png "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.png "Diagram Multi-Scale"
 
@@ -75,19 +77,27 @@ From galleries above, I observed that these images were likely taken from 30fps 
 ### Design and Test a Model Architecture
 
 #### 3. Data Preprocessing
-There are two stages of data preprocessing I consider to apply. 
-* grayscaling and normalization
-* data augmentation
+In `[1] code cell`, all images were loaded by pickle library which contains resize version of 32x32 while original ones vary from 15x15 to 250x250.
 
-In the first stage, I converted the images to grayscale. Although color could play an important role in different categories of traffic signs for human preception; qualities such as size, brightness, saturation of sample images could change RGB values easily and mislead our learning model. Then I normalized the images with min-max scaling to a range of [0.1, 0.9] for activation function. Both techniques also improve constrast casued by glare or darkness. Please refer to code cell [5]. Note that other feature scaling and normalization methods are available for different purposes at [cs231n.github.io](http://cs231n.github.io/neural-networks-2/#datapre).
+In `[6] code cell`, I applied grayscaling and normalization of min-max scaling as preprocessing steps. Here is a list of data preprocessing steps that I consider to apply: 
+* grayscaling (or huescaling)
+* normalization 
+* data augmentation (or cross-validation)
 
-Here is an example of a traffic sign image before and after grayscaling and normalization.
+First of all, I converted the images to grayscale. Although color could play an important role in different categories of traffic signs for human preception; qualities such as size and HSB of sample images could easily change RGB values and mislead our learning model. On the other hand, huescaling is another interesting color transformation step to try, it does enhance the recognition in some cases, however, it could also over emphasize or simplify shapes of a image based on a few tests I performed. Here are two examples.
 
-![alt text][image3a]
+![img with hue][image3a]
+![img with hue][image3c]
 
-The second stage is data augmentation. I haven't decided whether using it or not. I'll come back to this after a few training and validation experiments. This will be my reference of [how to generate additional data](https://medium.com/@vivek.yadav/dealing-with-unbalanced-data-generating-additional-data-by-jittering-the-original-image-7497fe2119c3#.ywt6bxs5d). 
+As the second step, I normalized the images with min-max scaling to a range of [0.1, 0.9]. The range is chosen because it was also used in the Tensorflow Lab we worked on. I'm not sure if this was chosen in the Lab for a specific reason (activation function?) or something else. How about ranges such as [-1, 1] and [0, 1]? Note that other feature scaling and normalization methods are available for different purposes at [cs231n.github.io](http://cs231n.github.io/neural-networks-2/#datapre).
 
-Note that condsidering both computer power and small dataset, I decided not to use corss validation for this project.
+Here is an example of a traffic sign image before and after grayscaling and normalization. Based on my tests, both steps improve recognition of a image, espicially, constrast casued by glare or darkness.
+
+![img of greyscale][image3b]
+
+As for the data augmentation step, I haven't decided whether using it or not. I'll come back to this after a few training and validation experiments. In case I need it, [how to generate additional data](https://medium.com/@vivek.yadav/dealing-with-unbalanced-data-generating-additional-data-by-jittering-the-original-image-7497fe2119c3#.ywt6bxs5d) will be my reference. 
+
+Last but not lease, condsidering both computer power and the intrinsic factor that some classes of samples are lack of variations in images, I decided not to use either cross-validation or mixing (training and validation sets) and respliting them for this project.
 
 
 #### 4. Weight Initialization
