@@ -28,10 +28,10 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image2d]: ./assets/gallery_train.png "Gallery of Train Examples"
 [image2e]: ./assets/gallery_valid.png "Gallery of Valid Examples"
 [image3a]: ./assets/image_preprocess.png "Hue good"
-[image3c]: ./assets/image_hue_tragedy1.png "Hue bad"
+[image3c]: ./assets/image_hue_tragedy3.png "Hue bad"
 [image3b]: ./assets/image_grayscale.png "Grayscale"
-[image5a]: ./assets/diagram_leNet.png "Diagram LeNet"
-[image5b]: ./assets/diagram_multiScale.png "Diagram Multi-Scale"
+[image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
+[image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
 
 
 ## **Writeup report**
@@ -103,37 +103,41 @@ Last but not lease, condsidering both computer power and the intrinsic factor th
 #### 4. Initialization
 In `[7] code cell`, to initialize weights and bias, I used the tf.truncated_normal() function. I set all bias to 0 and initialized weights with mean=0 and stddev=0.1. Note that, in practice, the current recommendation is to give the initialization w = np.random.randn(n) * sqrt(2.0/n), this is used in the specific case of neural networks with ReLU neurons. [[See reference]](http://cs231n.github.io/neural-networks-2/#init)
 
+
 #### 5. Model Architecture 
-Here are two diagrams and tables describing my experiments models. 
-The code for these models is located in [*] cell of the ipython notebook. 
-These models are based on the [LeNet example](https://github.com/udacity/CarND-LeNet-Lab/blob/master/LeNet-Lab-Solution.ipynb) we learned in the class and 
-the [example paper](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) that was mentioned in the notebook.
+In `[8] and [9] code cells`, I experimented two ConvNet architectures and their parameters
 
-The LeNet model consisted of the following layers:
+| architecture | feature type | application |
+|:------:|:------:|:------:|
+| [LeNet-5](https://github.com/udacity/CarND-LeNet-Lab/blob/master/LeNet-Lab-Solution.ipynb) | single (SS) | zip codes and digits |
+| [Multi-Scale features](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) |  single or multi-scale (MS) | traffic sign recognition |
 
-![alt text][image5a]
+with layers as:
+* `INPUT -> [5x5 CONV -> RELU -> 2x2 POOL]*2 -> [FC -> RELU -> DROPOUT]*2 -> FC`.
+* `POOL` uses max pooling for subsampling 
+* `RELU` is the activation function
+* `DROPOUT` is the regularization
 
-| Layer         		|     Description	        					  | 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 grayscale image   			  | 
-| Convolution 5x5 | 2x2 stride, valid padding, outputs 32x32x64 	|
-| RELU				|												|
-| Max pooling	    | 2x2 stride,  outputs 16x16x64  |
-| Convolution 5x5	| 2x2 stride, valid padding, ... |
-| RELU				|												|
-| Fully connected	| etc. |
-| RELU				|												|
-| Dropout	|												|
-| Fully connected	| etc. |
-| RELU				|												|
-| Dropout	|												|
-| Softmax				     | etc. |
+Here are the diagrams of these two architectures including layer sizes and an example set of parameters:
+* LeNet-5
+![leNet][image5a]
+* Multi-Scale features
+![multi-scale][image5b]
 
-The second model consisted of the following layers:
+For the parameters, I first tried to tune a few sets of
+* k outputs, i.e:
 
-![alt text][image5b]
+|  | k1 | k2 | k3 | k4 |
+|:------:|:------:|:------:|:------:|:------:|
+| set 1 |   6 |  16 | 120 |  84 |
+| set 2 |  38 |  64 | 100 |  50 |
+| set 3 |  38 |  64 | 100 | 100 |
+| set 4 | 108 | 108 | 100 | 100 |
 
-...
+in `CONV` (k1, k2 feature maps) and `FC` (k3, k4 neurons) layers with SS architecture. 
+
+Then I tuned `DROPOUT` for further experiemnts.
+* keep rate: 0.4, 0.5, 0.6 or 0.7
 
 #### 6. Training
 The code for training the model is located in the [*] cell of the ipython notebook. 
