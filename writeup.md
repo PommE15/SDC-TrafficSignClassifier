@@ -105,72 +105,70 @@ In `[7] code cell`, to initialize weights and bias, I used the tf.truncated_norm
 
 
 #### 5. Model Architecture 
-In `[8] and [9] code cells`, I experimented two ConvNet architectures and their parameters
+In `[8] and [9] code cells`, I experimented two architectures and their parameters.
 
 | architecture | feature type | application |
-|:------:|:------:|:------:|
+|-------|-------|-------|
 | [LeNet-5](https://github.com/udacity/CarND-LeNet-Lab/blob/master/LeNet-Lab-Solution.ipynb) | single (SS) | zip codes and digits |
 | [Multi-Scale features](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) |  single or multi-scale (MS) | traffic sign recognition |
 
-with layers as:
-* `INPUT -> [5x5 CONV -> RELU -> 2x2 POOL]*2 -> [FC -> RELU -> DROPOUT]*2 -> FC`.
+They both has layers as:
+* `INPUT -> [5x5 CONV -> RELU -> 2x2 POOL]*2 -> [FC -> RELU -> DROPOUT]*2 -> FC`
 * `POOL` uses max pooling for subsampling 
 * `RELU` is the activation function
 * `DROPOUT` is the regularization
 
-Here are the diagrams of these two architectures including layer sizes and an example set of parameters:
+Here are two diagrams of these architectures including their layer sizes and an example set of parameters:
 * LeNet-5
 ![leNet][image5a]
 * Multi-Scale features
 ![multi-scale][image5b]
 
-For the parameters, I first tried to tune a few sets of
+For the architecure parameters, I tried a few sets of
 * k outputs, i.e:
 
-|  | k1 | k2 | k3 | k4 |
-|:------:|:------:|:------:|:------:|:------:|
-| set 1 |   6 |  16 | 120 |  84 |
-| set 2 |  38 |  64 | 100 |  50 |
-| set 3 |  38 |  64 | 100 | 100 |
-| set 4 | 108 | 108 | 100 | 100 |
+|       |    k1 |    k2 |    k3 |    k4 |
+|-------|-------|-------|-------|-------|
+| set 1 |     6 |    16 |   120 |    84 |
+| set 2 |    38 |    64 |   100 |    50 |
+| set 3 |    38 |    64 |   100 |   100 |
+| set 4 |   108 |   108 |   100 |   100 |
 
-in `CONV` (k1, k2 feature maps) and `FC` (k3, k4 neurons) layers with SS architecture. 
+in `CONV` (k1, k2 feature maps) and `FC` (k3, k4 neurons) layers with SS architecture for further experiemnts. 
 
-Then I tuned `DROPOUT` for further experiemnts.
-* keep rate: 0.4, 0.5, 0.6 or 0.7
 
 #### 6. Training
-The code for training the model is located in the [*] cell of the ipython notebook. 
-To train the model, I experimented with the following paremeters:
+In `code cells [10] and [11]`, to train the model, I experimented with the following (hyper)paremeters:
 
-- k outputs
-- dropout
-- multi-scale
-- activation function (sigmoid, ..., relu)
-- regularization (L2?, dropout)
-- optimizer (gd, adagrad, adam)
-- learning rate
-- batch size
-- number of epochs 
+| parameters | values |
+|-------|-------|
+| batch size | 128, 256, 512 |
+| number of epochs | up to 30  |
+| optimizer | gradient descentOptimizer, adagrad, and adam |
+| learning rate | 0.001, 0.005, 0.01, 0.1, ... |
+| keep prob | 0.4, 0.5, 0.6 or 0.7 in `DROPOUT` |
 
-By doing this, I wasn't trying find out the best model or hyperparemters.
-I would just like to see how these tunings influence the acccurancy. 
+By doing this, I wasn't trying find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the acccurancy and use it as a base for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU) that recorded part of the results. From experiment results, I observe that:
 
-- spreadsheet links and
-- some charts
+* **batch size** is better either 128 or 256,
+* **epoch** is good between 15 to 20,
+* either **adagrad and adam optimizer** gives good results but they are suitable for different ranges of learning rate, for example, adagrad around 0.1 and adam around 0.001.
+* If the layers is more sophisticated, **keep prob** is lower than those with simplier architecture layers. However, 0.5 is always a good start.
+
 
 #### 7. Solution Design
-Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
-The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
+In `code cells [12]`, I test one of models I experiemnted earlier.
 
 My final model results were:
 * training set accuracy of ?
 * validation set accuracy of ? 
 * test set accuracy of ?
 
-If an iterative approach was chosen:
+My iterative approach:
 * What was the first architecture that was tried and why was it chosen?
+> I chose LeNet-5 as the first architecture since this was taught in the clasee.
 * What were some problems with the initial architecture?
+> ...
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to over fitting or under fitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
 * Which parameters were tuned? How were they adjusted and why?
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
