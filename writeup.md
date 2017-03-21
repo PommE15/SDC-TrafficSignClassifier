@@ -32,6 +32,11 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
+[image8a]: ./assets/test_keepRight.png ""
+[image8b]: ./assets/test_limit60.png ""
+[image8c]: ./assets/test_priorityRoad.png ""
+[image8d]: ./assets/test_stop.png ""
+[image8e]: ./assets/test_yield.png ""
 
 
 ## **Writeup report**
@@ -144,16 +149,16 @@ In `code cells [10] and [11]`, to train the model, I experimented with the follo
 |-------|-------|
 | batch size | 128, 256, 512 |
 | number of epochs | up to 30  |
-| optimizer | gradient descentOptimizer, adagrad, and adam |
+| optimizer | gradient descent, adagrad, and adam |
 | learning rate | 0.001, 0.005, 0.01, 0.1, ... |
 | keep prob | 0.4, 0.5, 0.6 or 0.7 in `DROPOUT` |
 
 By doing this, I wasn't trying find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the acccurancy and use it as a base for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU) that recorded part of the results. From experiment results, I observe that:
 
-* **batch size** is better either 128 or 256,
-* **epoch** is good between 15 to 20,
-* either **adagrad and adam optimizer** gives good results but they are suitable for different ranges of learning rate, for example, adagrad around 0.1 and adam around 0.001.
-* If the layers is more sophisticated, **keep prob** is lower than those with simplier architecture layers. However, 0.5 is always a good start.
+* **batch size** is better as 128,
+* **epoch** is good between 15 to 25 depends on model complexity,
+* either **adagrad and adam optimizer** gives good results but they are suitable for different ranges of learning rate, for example, adagrad around 0.1 and adam around 0.001,
+* **keep prob** is lower in more sophisticated layer model than those with simplier layers; however, 0.5 is always a good start.
 
 
 #### 7. Solution Design
@@ -185,8 +190,8 @@ If a well known architecture was chosen:
 Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image8a] ![alt text][image8b] ![alt text][image8c] 
+![alt text][image8d] ![alt text][image8e]
 
 The first image might be difficult to classify because ...
 
