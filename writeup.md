@@ -32,11 +32,11 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
-[image8a]: ./assets/test_keepRight.png ""
-[image8b]: ./assets/test_limit60.png ""
-[image8c]: ./assets/test_priorityRoad.png ""
+[image8a]: ./assets/test_limit60.png ""
+[image8b]: ./assets/test_priorityRoad.png ""
+[image8c]: ./assets/test_yield.png ""
 [image8d]: ./assets/test_stop.png ""
-[image8e]: ./assets/test_yield.png ""
+[image8e]: ./assets/test_keepRight.png ""
 
 
 ## **Writeup report**
@@ -132,12 +132,12 @@ Here are two diagrams of these architectures including their layer sizes and an 
 For the architecure parameters, I tried a few sets of
 * k outputs, i.e:
 
-|       |    k1 |    k2 |    k3 |    k4 |
-|-------|-------|-------|-------|-------|
-| set 1 |     6 |    16 |   120 |    84 |
-| set 2 |    38 |    64 |   100 |    50 |
-| set 3 |    38 |    64 |   100 |   100 |
-| set 4 |   108 |   108 |   100 |   100 |
+| outputs |   k1 |   k2 |   k3 |   k4 |
+|---------|------|------|------|------|
+|   set 1 |    6 |   16 |  120 |   84 |
+|   set 2 |   38 |   64 |  100 |   50 |
+|   set 3 |   38 |   64 |  100 |  100 |
+|   set 4 |  108 |  108 |  100 |  100 |
 
 in `CONV` (k1, k2 feature maps) and `FC` (k3, k4 neurons) layers with SS architecture for further experiemnts. 
 
@@ -149,40 +149,47 @@ In `code cells [10] and [11]`, to train the model, I experimented with the follo
 |-------|-------|
 | batch size | 128, 256, 512 |
 | number of epochs | up to 30  |
-| optimizer | gradient descent, adagrad, and adam |
+| optimizer | Gradient Descent, Adagrad, and Adam |
 | learning rate | 0.001, 0.005, 0.01, 0.1, ... |
 | keep prob | 0.4, 0.5, 0.6 or 0.7 in `DROPOUT` |
 
-By doing this, I wasn't trying find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the acccurancy and use it as a base for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU) that recorded part of the results. From experiment results, I observe that:
+By doing this, I wasn't trying to find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the accuracy and use it as reference for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU) that recorded part of the iterative experiment. From the results, I observe that:
 
-* **batch size** is better as 128,
-* **epoch** is good between 15 to 25 depends on model complexity,
-* either **adagrad and adam optimizer** gives good results but they are suitable for different ranges of learning rate, for example, adagrad around 0.1 and adam around 0.001,
-* **keep prob** is lower in more sophisticated layer model than those with simplier layers; however, 0.5 is always a good start.
+* **batch size** is better using 128
+* **epoch** is good between 15 to 25 depends on model complexity
+* either **adagrad and adam optimizer** gives good results but they are suitable for different ranges of learning rate, for example, Adagrad around 0.1 and Adam around 0.001 based on my experiment
+* **keep prob** 0.5 is always a good start
 
 
 #### 7. Solution Design
-In `code cells [12]`, I test one of models I experiemnted earlier.
+In `code cells [12]`, I tested on one of models I experiemnted earlier.
 
-My final model results were:
+My final model (using model1, see below) results were:
 * training set accuracy of ?
 * validation set accuracy of ? 
 * test set accuracy of ?
 
 My iterative approach:
 * What was the first architecture that was tried and why was it chosen?
-> I chose LeNet-5 as the first architecture since this was taught in the clasee.
+> I chose LeNet-5 as the first architecture just to try and make sure I have a running model. 
 * What were some problems with the initial architecture?
-> ...
+> The layers of LeNet-5 architecture work well. However, this model was used for alphabets and digit recognition, the convolution layers might be too simple for image cognition. Thus, I referenced parameters of k outputs (feature maps and neurons) in the paper of Traffic Sign Recognition with Multi-Scale Convolutional Networks and this improved the accuracy.
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to over fitting or under fitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
+> Based on the reference paper, I also tried to add multi-scale features. The accuracy over epochs increase nicely (not too fast). However, this approach requires too much time for my compute power, I just tried a few setups in the paper and observe the accuracy curve over epochs. I didn't use it for my final model. On the other hand, I added dropout in `fc` layers in my models to avoid over fitting. The models performed better with dropout than without. I observed the accuracy difference between training and validation sets to tune the keep probability. 
 * Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+> All parameters mentioned in section 6. training are tuned to observe the influence on results and for making decision for the final model. In particular, I chose the optimizer and batch size based on my experiment results. I also checked where and how often the accuracy drops over epochs to micro tune the learning rate.   
+* What are some of the important design choices and why were they chosen? 
+> Most of the choices were made by observing experiment results and other points mentioned earlier. Here are three models that I considered to use for the final design. All of them use single feature, Adam optimizer, and batch size 128. 
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+| parameters | model 1 | model 2 | model 3 |
+|-------|-------|-------|-------|
+| k outputs     | 38, 64, 100, 50 | 108, 108, 100, 100 | 6, 16, 120, 84 |
+| keep prob     | 0.5 | 0.48 | 0.6 |
+| learning rate | 0.001 | 0.0008 | 0.002 |
+| epochs        |  | 18 (early stop) | 25 |
+
+Note that the epochs set up to 25 epoches, and the early stop is trigger by both training accuracy > 0.99 and validataion accuracy > 0.96. Those numbers also came from my iteractive experiment.
+
 
 ### Test a Model on New Images
 
