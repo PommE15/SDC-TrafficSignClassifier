@@ -2,9 +2,9 @@
 
 ## **Submission Files**
 
-* The [Traffic_Sign_Classifier.ipynb](https://github.com/PommE15/SDC-...) notebook
-* A PDF export of the project notebook named [report.pdf](...)
-* The [assets folder](https://github.com/PommE15/SDC-TrafficSignClassifier/tree/master/assets) (any additional files used for this project but not [GTSD](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) or [traffic-sign-data.zip](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip))
+* The [Traffic_Sign_Classifier.ipynb](./Traffic_Sign_Classifier.ipynb) notebook
+* A PDF export of the project notebook named [report.pdf](./report.pdf)
+* The [assets folder](./assets) (any additional files used for this project but not [GTSD](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) or [traffic-sign-data.zip](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip))
 * My [writeup report](https://github.com/PommE15/SDC-TrafficSignClassifier/blob/master/writeup.md) as a markdown here
 
 
@@ -32,12 +32,14 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
+[image8a]: ./assets/lines_results_finals.png ""
 [image8a]: ./assets/test_limit60.png ""
 [image8b]: ./assets/test_priorityRoad.png ""
 [image8c]: ./assets/test_yield.png ""
 [image8d]: ./assets/test_stop.png ""
 [image8e]: ./assets/test_keepRight.png ""
-
+[image8f]: ./assets/test_all.png ""
+[image10]: ./assets/gallery_featuremaps.png ""
 
 ## **Writeup report**
 
@@ -153,7 +155,7 @@ In `code cells [10] and [11]`, to train the model, I experimented with the follo
 | learning rate | 0.001, 0.005, 0.01, 0.1, ... |
 | keep prob | 0.4, 0.5, 0.6 or 0.7 in `DROPOUT` |
 
-By doing this, I wasn't trying to find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the accuracy and use it as reference for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU) that recorded part of the iterative experiment. From the results, I observe that:
+By doing this, I wasn't trying to find out the best model or hyperparemters since some parameters seem to affect each other. My purpose was to observe how these tunings influence the accuracy and use it as reference for the solution design. Here is the [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU/edit#gid=72528419) that recorded part of the iterative experiment. From the results, I observe that:
 
 * **batch size** is better using 128
 * **epoch** is good between 15 to 25 depends on model complexity
@@ -164,10 +166,10 @@ By doing this, I wasn't trying to find out the best model or hyperparemters sinc
 #### 7. Solution Design
 In `code cells [12]`, I tested on one of models I experiemnted earlier.
 
-My final model (using model1, see below) results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+My final model (using model A, see below) results were:
+* training set accuracy of 0.993
+* validation set accuracy of 0.964
+* test set accuracy of 0.941
 
 My iterative approach:
 * What was the first architecture that was tried and why was it chosen?
@@ -179,57 +181,62 @@ My iterative approach:
 * Which parameters were tuned? How were they adjusted and why?
 > All parameters mentioned in section 6. training are tuned to observe the influence on results and for making decision for the final model. In particular, I chose the optimizer and batch size based on my experiment results. I also checked where and how often the accuracy drops over epochs to micro tune the learning rate.   
 * What are some of the important design choices and why were they chosen? 
-> Most of the choices were made by observing experiment results and other points mentioned earlier. Here are three models that I considered to use for the final design. All of them use single feature, Adam optimizer, and batch size 128. 
+> Most of the choices were made by observing experiment results and other points mentioned earlier. 
 
-| parameters | model 1 | model 2 | model 3 |
+Here are three models that I considered to use for the final design. All of them use single feature, Adam optimizer, and batch size 128. 
+
+| parameters | model A | model B | model C |
 |-------|-------|-------|-------|
-| k outputs     | 38, 64, 100, 50 | 108, 108, 100, 100 | 6, 16, 120, 84 |
-| keep prob     | 0.5 | 0.48 | 0.6 |
-| learning rate | 0.001 | 0.0008 | 0.002 |
-| epochs        |  | 18 (early stop) | 25 |
+| k outputs     | **38, 64, 100, 50** | 108, 108, 100, 100 | 6, 16, 120, 84 |
+| keep prob     | **0.5** | 0.48 | 0.6 |
+| learning rate | **0.001** | 0.0008 | 0.002 |
+| epochs        | **16 (early stop)** | 18 (early stop) | 25 |
+| session       | **./convnet** | ./convnet 3 | ./convnet 4 |
 
-Note that the epochs set up to 25 epoches, and the early stop is trigger by both training accuracy > 0.99 and validataion accuracy > 0.96. Those numbers also came from my iteractive experiment.
+Note1. The epoch sets up to 25, and it triggers early stopping in conditions of both training accuracy > 0.99 and validataion accuracy > 0.96. Those two numbers are also used to avoid over fitting and they came from the iterative experiment.
+
+Note2. A session file is saved for testing.
+
+The results of these models can be found in this [spreadsheet](https://docs.google.com/spreadsheets/d/1ywtsyiECjC3c9LggXh1KTzy_Qqplh6WmpMLmK8KtIIU/edit#gid=685744898). Here is a line chart shows the accuracy over epochs:
+
+![alt text][image7a]
+
+Base on this final experiment, I chose **model A** as final model to test on new images.
 
 
 ### Test a Model on New Images
+The implementation of this section is located in `[13] - [16] code cells`.
 
 #### 8. Acquiring New Images
-Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
-Here are five German traffic signs that I found on the web:
+
+Here are five German traffic signs that I found on the web and google map:
 
 ![alt text][image8a] ![alt text][image8b] ![alt text][image8c] 
 ![alt text][image8d] ![alt text][image8e]
 
-The first image might be difficult to classify because ...
+Here are how they look like after loading with pickle:
+![alt text][image8f]
 
-#### 9. Performance on New Images
-Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
-The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
-Here are the results of the prediction:
+The second and fifth images might be difficult to classify because of the quality (resolution). The background of the second image could be confusing and the angle of the fifth image is not so straight.
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+#### 9. Performance on New Images with Softmax Probabilities (Prob)
 
+In `code cell [14]`, the model was able to correctly guess all traffic signs. This could thanks to the number of training samples - 4 of the 5 traffic signs have more than 1000 samples, or the testing images are simply just too easy to be classified. In `code cell [15]`, all images are more than 97% sure about the traffic sign they are recognized.
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+Here are the results of the prediction with top 3 probabilities:
 
-#### 10. Model Certainty - Softmax Probabilities
-Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| Image	/	Prediction 1 | Prob 1 | Prediction 2 | Prob 2	| Prediction 3 | Prob 3	| 
+|----------------------|--------|--------------|---------|--------------|---------| 
+| **Speed limit (60km/h)** | .9998624 | Go straight or right | .0000833 | End of all speed and ... | .0000494 |
+| **Priority road**     	 | .9704881 | Roundabout ... | .0290123 | End of no passing  | .0002145 |
+| **Yield**					       | .9999999 | Ahead only  | .0000001 | Keep right  | 0 |
+| **Stop**	      		     | .9915633 | Turn right ahead | .0048740 | No entry | .0017053 |
+| **Keep right**			     | .9997202 | Turn left ahead | .0002099 | Yield | .0000678 |
 
 
-For the second image ... 
+### Visualize the Neural Network's State with Test Images
+#### 10. Feature Maps Visualization
+
+In the last `code cells [17]`, I plotted the output of the network's weight layers on top of a testing image. Here is an example of my network's c1 output feature maps on image of Speed limit (60km/h):
+
+![alt text][image10]
