@@ -18,7 +18,7 @@ The goals / steps of this project are the following:
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report
 
-The writeup below is based on the [rubric points](https://review.udacity.com/#!/rubrics/481/view).  
+The writeup below is based on the [rubric points](https://review.udacity.com/#!/rubrics/481/view) and this template(https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md).  
 
 [//]: # (Image References)
 
@@ -32,7 +32,7 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
-[image8a]: ./assets/lines_results_finals.png ""
+[image7a]: ./assets/lines_results_finals.png ""
 [image8a]: ./assets/test_limit60.png ""
 [image8b]: ./assets/test_priorityRoad.png ""
 [image8c]: ./assets/test_yield.png ""
@@ -201,7 +201,7 @@ The results of these models can be found in this [spreadsheet](https://docs.goog
 
 ![alt text][image7a]
 
-Base on this final experiment, I chose **model A** as final model to test on new images.
+Base on this final experiment, I chose **model A** as my final model to test on new images.
 
 
 ### Test a Model on New Images
