@@ -1,24 +1,6 @@
-# **Traffic Sign Recognition** 
+# **Writeup Report of Traffic Sign Recognition** 
 
-## **Submission Files**
-
-* The [Traffic_Sign_Classifier.ipynb](./Traffic_Sign_Classifier.ipynb) notebook
-* A PDF export of the project notebook named [report.pdf](./report.pdf)
-* The [assets folder](./assets) (any additional files used for this project but not [GTSD](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) or [traffic-sign-data.zip](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip))
-* My [writeup report](https://github.com/PommE15/SDC-TrafficSignClassifier/blob/master/writeup.md) as a markdown here
-
-
-## **Instruction of Build a Traffic Sign Recognition Project**
-
-The goals / steps of this project are the following:
-* Load the data set (see below for links to the project data set)
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
-
-The writeup below is based on the [rubric points](https://review.udacity.com/#!/rubrics/481/view) and this template(https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md).  
+This writeup is based on the [rubric points](https://review.udacity.com/#!/rubrics/481/view) and this [template](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md).  
 
 [//]: # (Image References)
 
@@ -32,7 +14,7 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image3b]: ./assets/image_grayscale.png "Grayscale"
 [image5a]: ./assets/diagram_leNet.jpg "Diagram LeNet"
 [image5b]: ./assets/diagram_multiScale.jpg "Diagram Multi-Scale"
-[image7a]: ./assets/lines_results_finals.png ""
+[image7a]: ./assets/lines_result_finals.png ""
 [image8a]: ./assets/test_limit60.png ""
 [image8b]: ./assets/test_priorityRoad.png ""
 [image8c]: ./assets/test_yield.png ""
@@ -41,11 +23,10 @@ The writeup below is based on the [rubric points](https://review.udacity.com/#!/
 [image8f]: ./assets/test_all.png ""
 [image10]: ./assets/gallery_featuremaps.png ""
 
-## **Writeup report**
 
-### Dataset Summary & Exploration
+## Dataset Summary & Exploration
 
-#### 1. Dataset summary 
+### 1. Dataset summary 
 In `[2] code cell`,
 I used python's numpy library to calculate summary statistics of the traffic signs data set.
 
@@ -54,7 +35,7 @@ I used python's numpy library to calculate summary statistics of the traffic sig
 * The shape of a traffic sign image is 32x32x3
 * The number of unique classes/labels in the data set is 43
 
-#### 2. Exploratory Visualization
+### 2. Exploratory Visualization
 In `[3], [4], and [5] code cells`,
 there are five visualizations of data set.
 
@@ -81,9 +62,9 @@ I picked label 19 to take a deeper look at samples in one class.
 
 From galleries above, I observed that these images were likely taken from 30fps video clips. In every 30 clips, the same traffic sign zooms in and out, the hue/saturation/brightness (HSB) differs, and some of images are neither straight nor originally square. The validation set, in particular, there is only 1 video clips in class label 19, which is potential to issues such as overfitting or false classification.
 
-### Design and Test a Model Architecture
+## Design and Test a Model Architecture
 
-#### 3. Data Preprocessing
+### 3. Data Preprocessing
 In `code cell [1]`, all images were loaded by pickle library which contains resize version of 32x32 while original ones vary from 15x15 to 250x250.
 
 In `code cell [6]`, I applied grayscaling and normalization of min-max scaling as preprocessing steps. Here is a list of data preprocessing steps that I consider to apply: 
@@ -107,11 +88,11 @@ As for the data augmentation step, I haven't decided whether using it or not. I'
 Last but not lease, condsidering both computer power and the intrinsic factor that some classes of samples are lack of variations in images, I decided not to use either cross-validation or mixing (training and validation sets) and respliting them for this project.
 
 
-#### 4. Initialization
+### 4. Initialization
 In `[7] code cell`, to initialize weights and bias, I used the tf.truncated_normal() function. I set all bias to 0 and initialized weights with mean=0 and stddev=0.1. Note that, in practice, the current recommendation is to give the initialization w = np.random.randn(n) * sqrt(2.0/n), this is used in the specific case of neural networks with ReLU neurons. [[See reference]](http://cs231n.github.io/neural-networks-2/#init)
 
 
-#### 5. Model Architecture 
+### 5. Model Architecture 
 In `[8] and [9] code cells`, I experimented two architectures and their parameters.
 
 | architecture | feature type | application |
@@ -144,7 +125,7 @@ For the architecure parameters, I tried a few sets of
 in `CONV` (k1, k2 feature maps) and `FC` (k3, k4 neurons) layers with SS architecture for further experiemnts. 
 
 
-#### 6. Training
+### 6. Training
 In `code cells [10] and [11]`, to train the model, I experimented with the following (hyper)paremeters:
 
 | parameters | values |
@@ -163,7 +144,7 @@ By doing this, I wasn't trying to find out the best model or hyperparemters sinc
 * **keep prob** 0.5 is always a good start
 
 
-#### 7. Solution Design
+### 7. Solution Design
 In `code cells [12]`, I tested on one of models I experiemnted earlier.
 
 My final model (using model A, see below) results were:
@@ -204,10 +185,10 @@ The results of these models can be found in this [spreadsheet](https://docs.goog
 Base on this final experiment, I chose **model A** as my final model to test on new images.
 
 
-### Test a Model on New Images
+## Test a Model on New Images
 The implementation of this section is located in `[13] - [16] code cells`.
 
-#### 8. Acquiring New Images
+### 8. Acquiring New Images
 
 Here are five German traffic signs that I found on the web and google map:
 
@@ -219,7 +200,7 @@ Here are how they look like after loading with pickle:
 
 The second and fifth images might be difficult to classify because of the quality (resolution). The background of the second image could be confusing and the angle of the fifth image is not so straight.
 
-#### 9. Performance on New Images with Softmax Probabilities (Prob)
+### 9. Performance on New Images with Softmax Probabilities (Prob)
 
 In `code cell [14]`, the model was able to correctly guess all traffic signs. This could thanks to the number of training samples - 4 of the 5 traffic signs have more than 1000 samples, or the testing images are simply just too easy to be classified. In `code cell [15]`, all images are more than 97% sure about the traffic sign they are recognized.
 
@@ -234,8 +215,8 @@ Here are the results of the prediction with top 3 probabilities:
 | **Keep right**			     | .9997202 | Turn left ahead | .0002099 | Yield | .0000678 |
 
 
-### Visualize the Neural Network's State with Test Images
-#### 10. Feature Maps Visualization
+## Visualize the Neural Network's State with Test Images
+### 10. Feature Maps Visualization
 
 In the last `code cells [17]`, I plotted the output of the network's weight layers on top of a testing image. Here is an example of my network's c1 output feature maps on image of Speed limit (60km/h):
 
